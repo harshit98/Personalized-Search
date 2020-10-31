@@ -1,0 +1,7 @@
+# Garbage files
+.vscode
+.DS_Store
+.idea
+
+# virtualenv directory
+personalized-search/
