@@ -4,12 +4,14 @@ This repo mostly contains code related to my Pycon Sweden 2020 talk on "Building
 
 ## Features
 
-- Syncing database with the Elasticsearch.
+- Syncing database with the Elasticsearch. Two ways:
     - Using JDBC driver with Logstash to sync my PostgresDB with my Elasticsearch server.
 
--  Data indexing process according to the pre-defined mappings in the Elasticsearch and structuring nested data.
+    - Data indexing process according to the pre-defined mappings in the Elasticsearch and structuring nested data.
 
-- Analyzing Elasticsearch data using Kibana to understand how our search will be returning results to the client on a search query. This repo will be covering some use-cases covered during the talk.
+- Analyzing Elasticsearch data using Kibana to understand how our search will be returning results to the client on a search query. 
+
+This repo will be covering some use-cases covered during the talk.
 
 ## Workflow Architecture
 
