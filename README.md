@@ -28,7 +28,7 @@ This repo will be covering some use-cases covered during the talk.
 
 ## Usage
 
-To run all the services together on local, make sure all the prerequisites mentioned above are downloaded on your machine.
+To run all the services together on local, make sure all the prerequisites mentioned above are downloaded.
 
 Elasticsearch, Kibana and Logstash can be launched via downloading the zip from their official website and run `bin/<binary-name>` where `<binary-name>` can be `kibana` or `elasticsearch`.
 
