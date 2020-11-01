@@ -4,7 +4,7 @@ from database.connection import DatabaseServer
 from elasticsearch.exceptions import TransportError
 from logger import Logger
 
-from base.process_data import get_processed_json_data
+from base.process import get_processed_json_data
 
 logger = Logger.get_info_logger()
 
