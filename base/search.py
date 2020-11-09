@@ -1,6 +1,6 @@
-from logger import Logger
-from typing import List
+import json
 
+from logger import Logger
 from constants.app_constants import Search
 from dataclasses import dataclass
 
@@ -30,17 +30,20 @@ class PersonalizedSearch(object):
 
     @staticmethod
     def create_mappings():
-        mapping = {
+        index_settings = {
             "settings": {
                 "number_of_shards": 1,
                 "number_of_replicas": 0,
-                # Custom analyzer for analyzing fields
                 "analysis": {
                     "filter": {
                         "filter_whitespace_remove": {
                             "type": "pattern_replace",
                             "pattern": " ",
                             "replacement": ""
+                        },
+                        "english_stop": {
+                            "type": "stop",
+                            "stopwords": "_english_"
                         }
                     },
                     "analyzer": {
@@ -52,10 +55,17 @@ class PersonalizedSearch(object):
                             "type": "custom",
                             "tokenizer": "keyword",
                             "filter": ["lowercase", "filter_whitespace_remove"]
+                        },
+                        "analyzer_remove_stopwords": {
+                            "type": "custom",
+                            "tokenizer": "standard",
+                            "filter": ["lowercase", "english_stop"]
                         }
                     }
                 }
-            },
+            }
+        }
+        mapping = {
             "mappings": {
                 "properties": {
                     "category": {
@@ -102,67 +112,13 @@ class PersonalizedSearch(object):
                 }
             }
         }
-        return mapping
 
-    @staticmethod
-    def get_spellcheck_query(product_name_text: str):
-        spellcheck_query = {
-            "suggest": {
-                "product_name_suggester": {
-                    "text": product_name_text,
-                    "term": {
-                        "field": "product_name"
-                    }
-                }
-            }
-        }
-        return spellcheck_query
+        index_settings = json.loads(index_settings)
+        mapping = json.loads(mapping)
 
-    @staticmethod
-    def fetch_single_product(product_id: int):
-        fetch_single_product_query = {
-            "query": {
-                "bool": {
-                    "must": {
-                        "match": {
-                            "product_id": product_id
-                        }
-                    }
-                }
-            }
+        merged_dict = {
+            key: value
+            for (key, value) in (index_settings.items() + mapping.items())
         }
-        return fetch_single_product_query
 
-    @staticmethod
-    def fetch_multiple_products(product_ids: List[int]):
-        fetch_multiple_products_query = {
-            "query": {
-                "bool": {
-                    "must": {
-                        "terms": {
-                            "product_id": product_ids
-                        }
-                    }
-                }
-            }
-        }
-        return fetch_multiple_products_query
-
-    @staticmethod
-    def fetch_aggregated_products():
-        aggregation_query = {
-            "aggs": {
-                "list_of_products": {
-                    "terms": {"field": "product_name"}
-                }
-            },
-            "query": {
-                "range": {
-                    "@timestamp": {
-                        "gte": "now-1d/d",
-                        "lt": "now/d"
-                    }
-                }
-            }
-        }
-        return aggregation_query
+        return json.dumps(merged_dict)

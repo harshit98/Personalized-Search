@@ -13,3 +13,7 @@ class Database(Enum):
     DB_PORT = 5432
     DB_USER = "root"
     DB_PASSWORD = "password"
+
+
+class Config(Enum):
+    ES_HOST = "http://localhost:9200"
